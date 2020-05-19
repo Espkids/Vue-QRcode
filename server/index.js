@@ -21,23 +21,23 @@ const spaces = new aws.S3({
 const upload = multer({
     storage: multerS3({
     s3: spaces,
-    bucket: 'photoims',
+    bucket: 'photoims/photoims',
     acl: 'public-read',
     key: function (request, file, cb) {
-        console.log(file)
+        // console.log(file)
         cb(null, file.originalname)
     }
     })
 }).array('upload', 1)
 
-app.post('/upload', function (request, res, next) {
+app.post('/upload', function (request, response, next) {
     upload(request, response, function (error) {
         if (error) {
-            res.send(error)
             console.log(error)
+            response.send(error)
         }
-        console.log('File uploaded successfully.')
-        res.send(response)
+        console.log('File has uploaded')
+        // response.send('success')
     })
 })
 
