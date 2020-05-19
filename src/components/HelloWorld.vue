@@ -19,11 +19,15 @@
           <qrcode-vue :value="value" :size="size" level="H"></qrcode-vue>
         </p>
 
-        <form method="post"  enctype="multipart/form-data" action="http://localhost:5000/upload">
+        <form id="myForm" method="post" action="http://localhost:5000/upload" enctype="multipart/form-data">
           <label for="file">Upload a file</label>
-          <input type="file" name="upload">
-          <input type="submit" class="button">
+          <!-- <input type="file" name="upload">
+          <v-btn type="submit" class="primary">upload</v-btn> -->
+          <input type="file" id="file" ref="file" name="file" @change="initialFile">
+          <v-btn @click="uploadFile" class="primary">upload</v-btn>
         </form>
+
+        <v-img src="https://photoims.sgp1.digitaloceanspaces.com/photoims/vehicle.jpg"></v-img>
       </v-col>
     </v-row>
   </v-container>
@@ -31,7 +35,7 @@
 
 <script>
   import QrcodeVue from 'qrcode.vue'
-  import axios from 'axios'
+  // import axios from 'axios'
 
   export default {
     name: 'HelloWorld',
@@ -39,29 +43,30 @@
     data: () => ({
       value: 'https://photoims.sgp1.digitaloceanspaces.com/photoims/vehicle.jpg',
       size: 150,
-      fileData: null
+      file: ''
     }),
     components: {
       QrcodeVue
     },
     methods: {
-      initialFile (e) {
-        const data = e.target.files[0]
-        this.fileData = data
-        console.log(this.fileData)
+      initialFile () {
+        this.file = this.$refs.file.files[0]
+        console.log(this.file)
       },
       uploadFile () {
-        axios({
-          method:'post',
-          url:'/upload',
-          baseURL: 'http://localhost:5000',
-        })
-        .then(response => {
-            console.log(response)
-        })
-        .catch(error => {
-            console.log(error)
-        });
+        const myForm = document.getElementById('myForm')
+        const formData = new FormData(myForm)
+        // formData.append('file', this.file)
+        console.log(formData)
+      //   axios.post('/upload', formData, {
+      //     baseURL: 'http://localhost:5000'
+      //   })
+      //   .then(res => {
+      //     console.log(res)
+      //   })
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
       }
     }
   }
