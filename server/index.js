@@ -24,21 +24,25 @@ const upload = multer({
     bucket: 'photoims/photoims',
     acl: 'public-read',
     key: function (request, file, cb) {
-        // console.log(file)
+        console.log(file)
         cb(null, file.originalname)
     }
     })
-}).array('upload', 1)
+}).array('file', 1)
 
 app.post('/upload', function (request, response, next) {
     upload(request, response, function (error) {
         if (error) {
             console.log(error)
-            response.send(error)
+        } else {
+            console.log('File has uploaded')
         }
-        console.log('File has uploaded')
-        // response.send('success')
     })
+})
+
+app.post('/test', (req, res) => {
+    console.log(req.body)
+    res.send('Ok')
 })
 
 app.get('/', (req, res) => {

@@ -20,14 +20,14 @@
         </p>
 
         <form id="myForm" method="post" action="http://localhost:5000/upload" enctype="multipart/form-data">
-          <label for="file">Upload a file</label>
-          <!-- <input type="file" name="upload">
+          <!-- <label for="file">Upload a file</label>
+          <input class="mx-2" type="file" name="upload">
           <v-btn type="submit" class="primary">upload</v-btn> -->
-          <input type="file" id="file" ref="file" name="file" @change="initialFile">
+          <input type="file" id="file" ref="file" name="upload" @change="initialFile">
           <v-btn @click="uploadFile" class="primary">upload</v-btn>
         </form>
 
-        <v-img src="https://photoims.sgp1.digitaloceanspaces.com/photoims/vehicle.jpg"></v-img>
+        <v-img :src="value"></v-img>
       </v-col>
     </v-row>
   </v-container>
@@ -35,7 +35,7 @@
 
 <script>
   import QrcodeVue from 'qrcode.vue'
-  // import axios from 'axios'
+  import axios from 'axios'
 
   export default {
     name: 'HelloWorld',
@@ -51,22 +51,19 @@
     methods: {
       initialFile () {
         this.file = this.$refs.file.files[0]
-        console.log(this.file)
       },
       uploadFile () {
-        const myForm = document.getElementById('myForm')
-        const formData = new FormData(myForm)
-        // formData.append('file', this.file)
-        console.log(formData)
-      //   axios.post('/upload', formData, {
-      //     baseURL: 'http://localhost:5000'
-      //   })
-      //   .then(res => {
-      //     console.log(res)
-      //   })
-      //   .catch(err => {
-      //     console.log(err)
-      //   })
+        const formData = new FormData()
+        formData.append('file', this.file)
+        axios.post('/upload', formData, {
+          baseURL: 'http://localhost:5000'
+        })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
       }
     }
   }
