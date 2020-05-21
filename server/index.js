@@ -14,8 +14,8 @@ app.use(cors())
 const spacesEndpoint = new aws.Endpoint('sgp1.digitaloceanspaces.com') //Endpoint ดูจาก spaces -> setting
 const spaces = new aws.S3({
     endpoint: spacesEndpoint,
-    accessKeyId: '2S4WCDEYR2MBFU5VTI2R',
-    secretAccessKey: '+Z5G/LgaGaMM/L6/lNWMWxdVvBbtwsAV1+3n4rx+E2Q'
+    accessKeyId: '',
+    secretAccessKey: ''
     // access และ secret key ได้จากการสร้างโดยกด manage keys เมื่อสร้างแล้ว
     // ซักพัก secret จะไม่แสดงถ้าลืมต้องกด regenarate key หรือสร้างใหม่
 })
