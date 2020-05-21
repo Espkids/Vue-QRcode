@@ -16,7 +16,7 @@
         </h1>
 
         <p class="subheading font-weight-regular">
-          <qrcode-vue :value="value" :size="size" level="H"></qrcode-vue>
+          <qrcode-vue :value="QRvalue" :size="size" level="H"></qrcode-vue>
         </p>
 
         <form id="myForm" method="post" action="http://localhost:5000/upload" enctype="multipart/form-data">
@@ -29,7 +29,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-btn class="success" @click="convertImage">Generate PDF</v-btn>
+      <v-btn class="success" @click="generatePDF">Generate PDF</v-btn>
     </v-row>
     <div id="mainContent">
       <h1 class="red--text">Test text!!</h1>
@@ -55,7 +55,8 @@
     name: 'HelloWorld',
 
     data: () => ({
-      value: 'https://photoims.sgp1.digitaloceanspaces.com/photoims/vehicle.jpg',
+      value: '',
+      QRvalue: '',
       size: 150,
       base64: '',
       file: ''
@@ -66,10 +67,46 @@
     methods: {
       initialFile () {
         this.file = this.$refs.file.files[0]
+        const imageType = ["image/jpeg", "image/jpg", "image/png"]
+        if (this.file.size > 500000) {
+          alert("Too large, max size allowed is 500kb")
+        } else if (imageType.includes(this.file.type)) {
+          const reader = new FileReader()
+          reader.onload = e => {
+            this.value = e.target.result // แปลงเป็น base64 ใช้แสดงใน <img> และ เพิ่มรูปลงในไฟล์ pdf
+          }
+          reader.readAsDataURL(this.file)
+        }
       },
       uploadFile () {
         const formData = new FormData()
         formData.append('file', this.file)
+        axios.post('http://localhost:5000/upload', formData)
+        .then(res => {
+          console.log(res)
+          this.QRvalue = res.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      },
+      generatePDF () {
+        const doc = new jsPDF('p','pt','a4')
+        const elementHTML = document.getElementById('mainContent')
+        const specialElementHandlers = {
+          '#elementH' : function () {
+            return true
+          }
+        }
+        doc.fromHTML(elementHTML, 15, 15, {
+          'width': 170,
+          'elementHandlers': specialElementHandlers
+        })
+        doc.addImage(this.value, 'JPEG', 15, 40, 180, 160) // import รูปเข้าไปใน pdf
+        const pdfFile = new File([doc.output("blob")], "filename.pdf", {  type: "pdf" }) // แปลงให้เป็น blob ก่อนแล้วส่งค่าไปให้ backend เซฟ
+        const formData = new FormData()
+        formData.append("file", pdfFile)
+
         axios.post('/upload', formData, {
           baseURL: 'http://localhost:5000'
         })
@@ -79,29 +116,6 @@
         .catch(err => {
           console.log(err)
         })
-      },
-      convertImage () {
-        const reader = new FileReader()
-        reader.onload = e => {
-          this.generatePDF(e.target.result)
-          }
-        reader.readAsDataURL(this.file)
-      },
-      generatePDF (data) {
-        this.base64 = data
-        var doc = new jsPDF('p','pt','a4')
-        var elementHTML = document.getElementById('mainContent')
-        var specialElementHandlers = {
-          '#elementH' : function () {
-            return true
-          }
-        }
-        doc.fromHTML(elementHTML, 15, 15, {
-          'width': 170,
-          'elementHandlers': specialElementHandlers
-        })
-        doc.addImage(this.base64, 'JPEG', 15, 40, 180, 160)
-        doc.save('sample-pdf')
       }
     }
   }
