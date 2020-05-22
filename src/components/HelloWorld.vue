@@ -16,7 +16,7 @@
         </h1>
 
         <p class="subheading font-weight-regular">
-          <qrcode-vue :value="QRvalue" :size="size" level="H"></qrcode-vue>
+          <qrcode-vue id="Qrcode" :value="QRvalue" :size="size" level="H"></qrcode-vue>
         </p>
 
         <form id="myForm" method="post" action="http://localhost:5000/upload" enctype="multipart/form-data">
@@ -56,7 +56,7 @@
 
     data: () => ({
       value: '',
-      QRvalue: '',
+      QRvalue: 'https://photoims.sgp1.digitaloceanspaces.com/photoims/ezgif.com-crop.jpg',
       size: 150,
       base64: '',
       file: ''
@@ -116,6 +116,10 @@
         .catch(err => {
           console.log(err)
         })
+      },
+      testQRcode () {
+        const data = document.getElementById('QRcode').toDataURL()
+        console.log(data)
       }
     }
   }
