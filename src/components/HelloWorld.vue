@@ -15,9 +15,9 @@
           Test QR-Code
         </h1>
 
-        <p class="subheading font-weight-regular">
-          <qrcode-vue id="Qrcode" :value="QRvalue" :size="size" level="H"></qrcode-vue>
-        </p>
+        <div class="subheading font-weight-regular">
+          <img :src="QRvalue">
+        </div>
 
         <form id="myForm" method="post" action="http://localhost:5000/upload" enctype="multipart/form-data">
           <!-- <label for="file">Upload a file</label>
@@ -30,6 +30,7 @@
     </v-row>
     <v-row justify="center">
       <v-btn class="success" @click="generatePDF">Generate PDF</v-btn>
+      <v-btn class="warning ml-2" @click="testQRcode">Generate QR-PDF</v-btn>
     </v-row>
     <div id="mainContent">
       <h1 class="red--text">Test text!!</h1>
@@ -47,23 +48,20 @@
 </template>
 
 <script>
-  import QrcodeVue from 'qrcode.vue'
   import axios from 'axios'
   import jsPDF from 'jspdf'
+  import VanillaQR from "vanillaqr"
 
   export default {
     name: 'HelloWorld',
 
     data: () => ({
       value: '',
-      QRvalue: 'https://photoims.sgp1.digitaloceanspaces.com/photoims/ezgif.com-crop.jpg',
+      QRvalue: '',
       size: 150,
       base64: '',
-      file: ''
+      file: '',
     }),
-    components: {
-      QrcodeVue
-    },
     methods: {
       initialFile () {
         this.file = this.$refs.file.files[0]
@@ -84,7 +82,7 @@
         axios.post('http://localhost:5000/upload', formData)
         .then(res => {
           console.log(res)
-          this.QRvalue = res.data
+          this.testQRcode(res.data)
         })
         .catch(err => {
           console.log(err)
@@ -117,9 +115,14 @@
           console.log(err)
         })
       },
-      testQRcode () {
-        const data = document.getElementById('QRcode').toDataURL()
-        console.log(data)
+      testQRcode (dataURL) {
+        // const data = document.getElementById('qq')
+        // console.log(data)
+        var qr = new VanillaQR({ // create QRcode
+          url: dataURL,
+        })
+        const imageElement = qr.toImage("jpg") // convert QRcode to image
+        this.QRvalue = imageElement.src
       }
     }
   }
