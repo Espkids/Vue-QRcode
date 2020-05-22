@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container id="content">
     <v-row class="text-center">
       <v-col cols="12">
         <v-img
@@ -30,7 +30,7 @@
     </v-row>
     <v-row justify="center">
       <v-btn class="success" @click="generatePDF">Generate PDF</v-btn>
-      <v-btn class="warning ml-2" @click="testQRcode">Generate QR-PDF</v-btn>
+      <v-btn class="warning ml-2" @click="generateQRcode">Generate QR-PDF</v-btn>
     </v-row>
     <div id="mainContent">
       <h1 class="red--text">Test text!!</h1>
@@ -61,6 +61,7 @@
       size: 150,
       base64: '',
       file: '',
+      result: 'https://photoims.sgp1.digitaloceanspaces.com/photoims/H_laos%20logo.png'
     }),
     methods: {
       initialFile () {
@@ -82,7 +83,8 @@
         axios.post('http://localhost:5000/upload', formData)
         .then(res => {
           console.log(res)
-          this.testQRcode(res.data)
+          this.result = res.data
+          this.generateQRcode()
         })
         .catch(err => {
           console.log(err)
@@ -90,6 +92,9 @@
       },
       generatePDF () {
         const doc = new jsPDF('p','pt','a4')
+        const width = doc.internal.pageSize.getWidth()
+        const height = doc.internal.pageSize.getHeight()
+        doc.addImage(this.value, 'JPEG', 0, 0, width, height)
         const elementHTML = document.getElementById('mainContent')
         const specialElementHandlers = {
           '#elementH' : function () {
@@ -97,32 +102,35 @@
           }
         }
         doc.fromHTML(elementHTML, 15, 15, {
-          'width': 170,
+          'width': 550,
           'elementHandlers': specialElementHandlers
         })
-        doc.addImage(this.value, 'JPEG', 15, 40, 180, 160) // import รูปเข้าไปใน pdf
-        const pdfFile = new File([doc.output("blob")], "filename.pdf", {  type: "pdf" }) // แปลงให้เป็น blob ก่อนแล้วส่งค่าไปให้ backend เซฟ
-        const formData = new FormData()
-        formData.append("file", pdfFile)
-
-        axios.post('/upload', formData, {
-          baseURL: 'http://localhost:5000'
-        })
-        .then(res => {
-          console.log(res)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+        doc.addImage(this.QRvalue, 'JPEG', (width/2), 300, 100, 100) // import รูปเข้าไปใน pdf
+        console.log(doc)
+        // doc.save('test.pdf') // save to pdf witn test.pdf name
+        
+        // upload generate to pdf and upload to server
+        // const pdfFile = new File([doc.output("blob")], "filename.pdf", {  type: "pdf" }) // แปลงให้เป็น blob ก่อนแล้วส่งค่าไปให้ backend เซฟ
+        // const formData = new FormData()
+        // formData.append("file", pdfFile)
+        // axios.post('/upload', formData, {
+        //   baseURL: 'http://localhost:5000'
+        // })
+        // .then(res => {
+        //   console.log(res)
+        //   this.result = res.data
+        // })
+        // .catch(err => {
+        //   console.log(err)
+        // })
       },
-      testQRcode (dataURL) {
-        // const data = document.getElementById('qq')
-        // console.log(data)
+      generateQRcode () {
         var qr = new VanillaQR({ // create QRcode
-          url: dataURL,
+          url: this.result
         })
         const imageElement = qr.toImage("jpg") // convert QRcode to image
         this.QRvalue = imageElement.src
+        console.log(this.QRvalue)
       }
     }
   }

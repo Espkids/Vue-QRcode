@@ -14,6 +14,7 @@
     "qrcode.vue": "^1.7.0",
     "vanillaqr": "^1.0.0",
     "vue": "^2.6.11",
+    "vue-html2canvas": "0.0.4",
     "vuetify": "^2.2.11"
   },
   "devDependencies": {
