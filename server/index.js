@@ -10,7 +10,7 @@ const PORT = 5000
 app.use(bodyParser.json())
 app.use(cors())
 
-
+var fileName = null
 const spacesEndpoint = new aws.Endpoint('sgp1.digitaloceanspaces.com')
 const spaces = new aws.S3({
     endpoint: spacesEndpoint,
@@ -27,12 +27,14 @@ const upload = multer({
     acl: 'public-read',
     key: function (request, file, cb) {
         console.log(file)
+        fileName = file.originalname
         cb(null, file.originalname)
     }
     })
 }).array('file', 1)
 
 app.post('/upload', function (request, response, next) {
+    fileName = null
     upload(request, response, function (error) {
         if (error) {
             console.log(error)
