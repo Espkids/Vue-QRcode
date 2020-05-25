@@ -141,12 +141,14 @@
       },
       generatePDFwithHtml2Canvas () {
         html2canvas(document.getElementById('content')).then(canvas => {
-          const img = canvas.toDataURL('image/jpeg')
-          const doc = new jsPDF('p','pt','a4')
+          const img = canvas.toDataURL('image/png')
+          // const doc = new jsPDF('p','px','a4')
           // const width = doc.internal.pageSize.getWidth()
           // const height = doc.internal.pageSize.getHeight()
-          doc.addImage(img, 'JPEG', 0, 0)
-          doc.save('test-test.pdf')
+          // doc.addImage(img, 'PNG', 0, 0)
+          // doc.save('test-test.pdf')
+          // console.log(`width = ${width} px, height =${height} px`)
+          console.log(img)
         })
       },
       generateQRcode () {
