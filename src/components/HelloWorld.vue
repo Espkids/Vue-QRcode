@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div id="content">
+    <v-card class="mx-auto px-3" id="content">
       <v-row class="text-center">
         <v-col class="mb-4">
           <h1 class="display-2 font-weight-bold mb-3">
@@ -25,20 +25,19 @@
         <v-btn class="warning ml-2" @click="generatePDFwithQRcode">Generate QR-PDF</v-btn>
         <v-btn class="primary ml-2" @click="generatePDFwithHtml2Canvas">Generate PDF with html2canvas</v-btn>
       </v-row>
-      <div id="mainContent">
+      <div style="width: 595px; height: 841px" class="primary mx-auto" id="mainContent">
         <h1 class="red--text">Test text!!</h1>
         <p>
-          Miusov, as a man man of breeding and deilcacy, could not but feel some inwrd qualms, when he reached the Father Superior's with Ivan: he felt ashamed of havin lost his temper. He felt that he ought to have disdaimed that despicable wretch, Fyodor Pavlovitch, too much to have been upset by him in Father Zossima's cell, and so to have forgotten himself. "Teh monks were not to blame, in any case," he reflceted, on the steps. "And if they're decent people here (and the Father Superior, I understand, is a nobleman) why not be friendly and courteous withthem? I won't argue, I'll fall in with everything, I'll win them by politness, and show them that I've nothing to do with that Aesop, thta buffoon, that Pierrot, and have merely been takken in over this affair, just as they have."
+          Miusov, ໃນຖານະເປັນຜູ້ຊາຍໃນການປັບປຸງພັນແລະຄວາມເສີຍເມີຍ, ບໍ່ສາມາດຮູ້ສຶກເຖິງຄຸນນະວຸດທິບາງຢ່າງ, ໃນເວລາທີ່ລາວໄດ້ເຂົ້າຫາພໍ່ຂອງຊັ້ນສູງກັບ Ivan: ລາວຮູ້ສຶກວ່າຜີຂອງຄວາມຫຼົງໄຫຼຈະສູນເສຍຄວາມໃຈຮ້າຍ. ລາວຮູ້ສຶກວ່າລາວຄວນຈະປະຕິເສດການດູຖູກທີ່ ໜ້າ ກຽດຊັງ, Fyodor Pavlovitch, ຫຼາຍເກີນໄປທີ່ຈະເຮັດໃຫ້ລາວເສີຍເມີຍໃນຫ້ອງຂອງພໍ່ Zossima, ແລະດັ່ງນັ້ນຈິ່ງລືມຕົວເອງ. "ກ່າວເຖິງພະສົງສາມະເນນ, ບໍ່ແມ່ນການ ຕຳ ນິ, ໃນກໍລະນີໃດກໍ່ຕາມ," ລາວກ່າວປະນາມໃນຂັ້ນຕອນ. "ແລະຖ້າພວກເຂົາເປັນຄົນທີ່ມີກຽດຢູ່ທີ່ນີ້ (ແລະພໍ່ຂອງຂ້ອຍດີກວ່າ, ຂ້ອຍເຂົ້າໃຈວ່າເປັນຄົນສູງສົ່ງ) ເປັນຫຍັງບໍ່ເປັນມິດແລະສຸພາບກັບຂ້ອຍ? ຂ້ອຍຈະບໍ່ໂຕ້ຖຽງ, ຂ້ອຍຈະຕົກຢູ່ໃນທຸກສິ່ງທຸກຢ່າງ, ຂ້ອຍຈະຊະນະພວກເຂົາໂດຍ. ການເມືອງ, ແລະສະແດງໃຫ້ພວກເຂົາເຫັນວ່າຂ້ອຍບໍ່ມີຫຍັງກ່ຽວຂ້ອງກັບ Aesop, buffta thta, ວ່າ Pierrot, ແລະໄດ້ຮັບຄວາມສົນໃຈໃນເລື່ອງນີ້, ຄືກັບທີ່ພວກເຂົາມີ. "
         </p>
         <p>
-          He determined to drop his litigation with the monastry, and relinguish his claims to the wood-cuting and fishery rihgts at once. He was the more ready to do this becuase the rights had becom much less valuable, and he had indeed the vaguest idea where the wood and river in quedtion were.
+          ລາວຕັ້ງໃຈທີ່ຈະປະຕິເສດຄະດີຂອງຕົນກັບພະລາຊະວັງ, ແລະແກ້ໄຂ ຄຳ ຮຽກຮ້ອງຂອງລາວຕໍ່ການຕັດໄມ້ແລະການປະມົງໃນເວລາດຽວກັນ. ລາວມີຄວາມພ້ອມຫຼາຍທີ່ຈະເຮັດສິ່ງນີ້ເພາະວ່າສິດທິຕ່າງໆໄດ້ກາຍເປັນສິ່ງທີ່ມີຄ່າ ໜ້ອຍ ກວ່າເກົ່າ, ແລະລາວມີຄວາມຄິດທີ່ບໍ່ແນ່ນອນທີ່ໄມ້ແລະແມ່ນ້ ຳ ໃນການອ້າງ.
         </p>
         <v-row>
           <v-img :src="value"></v-img>
         </v-row>
       </div>
-    </div>
-    
+    </v-card>
   </v-container>
 </template>
 
@@ -140,16 +139,30 @@
         doc.save('test.pdf')
       },
       generatePDFwithHtml2Canvas () {
-        html2canvas(document.getElementById('content')).then(canvas => {
+        html2canvas(document.getElementById('mainContent')).then(canvas => {
           const img = canvas.toDataURL('image/png')
-          // const doc = new jsPDF('p','px','a4')
-          // const width = doc.internal.pageSize.getWidth()
-          // const height = doc.internal.pageSize.getHeight()
-          // doc.addImage(img, 'PNG', 0, 0)
-          // doc.save('test-test.pdf')
-          // console.log(`width = ${width} px, height =${height} px`)
-          console.log(img)
+          const doc = new jsPDF('p','pt','a4')
+          const width = doc.internal.pageSize.getWidth()
+          const height = doc.internal.pageSize.getHeight()
+          doc.addImage(img, 'PNG', 0, 10, width, height)
+          doc.save('test-test.pdf')
+          console.log(`width = ${width} px, height =${height} px`)
+          // console.log(img)
         })
+        // const doc = new jsPDF('p','pt','a4')
+        // const width = doc.internal.pageSize.getWidth()
+        // const elementHTML = document.getElementById('mainContent')
+        // const specialElementHandlers = {
+        //   '#elementH' : function () {
+        //     return true
+        //   }
+        // }
+        // doc.fromHTML(elementHTML, 10, 10, {
+        //   'width': width,
+        //   'elementHandlers': specialElementHandlers
+        // })
+        // doc.text('ສະບາຍດີ!', 10, 10)
+        // doc.save('test.pdf')
       },
       generateQRcode () {
         var qr = new VanillaQR({ // create QRcode
