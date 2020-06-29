@@ -61,7 +61,7 @@
     methods: {
       initialFile () {
         this.file = this.$refs.file.files[0]
-        const imageType = ["image/jpeg", "image/jpg", "image/png"]
+        const imageType = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf']
         if (this.file.size > 500000) {
           alert("Too large, max size allowed is 500kb")
           document.getElementById('file').value = ''
@@ -80,8 +80,8 @@
         axios.post('http://localhost:5000/upload', formData)
         .then(res => {
           console.log(res)
-          this.qrUrl = res.data
-          this.generateQRcode()
+          // this.qrUrl = res.data
+          // this.generateQRcode()
         })
         .catch(err => {
           console.log(err)
